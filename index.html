@@ -25,11 +25,28 @@
   a { color: var(--blue); }
   footer { margin-top: 64px; padding-top: 20px; border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; }
   code.email { background: #f3f6fd; padding: 2px 8px; border-radius: 6px; font-family: inherit; font-weight: 600; color: var(--blue); }
+
+  /* language switch */
+  .langbar { display: flex; gap: 8px; justify-content: flex-end; padding: 12px 0 20px; flex-wrap: wrap; }
+  .langbar button {
+    font: inherit; font-size: 14px; font-weight: 600;
+    padding: 6px 14px; border-radius: 999px; cursor: pointer;
+    border: 1px solid var(--line); background: #fff; color: var(--muted);
+  }
+  .langbar button.on { background: var(--blue); border-color: var(--blue); color: #fff; }
+  .lang { display: none; }
+  .lang.on { display: block; }
 </style>
 </head>
 <body>
 <div class="wrap">
 
+<nav class="langbar" id="langbar">
+  <button data-lang="ko">한국어</button>
+  <button data-lang="en">English</button>
+</nav>
+
+<section class="lang" id="lang-ko">
 <header>
   <div class="brand">✈️ TRIPTORY</div>
   <h1>개인정보처리방침</h1>
@@ -109,7 +126,11 @@
 <h2>11. 고지 의무</h2>
 <p>본 방침의 내용이 변경되는 경우, 변경 사항을 본 페이지를 통해 공지합니다.</p>
 
-<hr class="divider">
+
+</section>
+
+<section class="lang" id="lang-en">
+
 
 <header>
   <div class="brand">✈️ TRIPTORY</div>
@@ -164,8 +185,45 @@
 <h2>11. Changes to This Policy</h2>
 <p>Any changes will be announced on this page.</p>
 
+
+</section>
+
 <footer>© 2026 Triptory. All rights reserved.</footer>
 
 </div>
+
+<script>
+(function () {
+  var SUPPORTED = ['ko', 'en'];
+  var FALLBACK = { ja: 'en', zh: 'en' };
+  function pick() {
+    var h = (location.hash || '').replace('#', '').toLowerCase().split('-')[0];
+    if (h) {
+      if (SUPPORTED.indexOf(h) >= 0) return h;
+      if (FALLBACK[h]) return FALLBACK[h];
+    }
+    var nav = (navigator.language || 'en').toLowerCase().split('-')[0];
+    if (SUPPORTED.indexOf(nav) >= 0) return nav;
+    return 'en';
+  }
+  function apply(lang) {
+    SUPPORTED.forEach(function (l) {
+      var sec = document.getElementById('lang-' + l);
+      if (sec) sec.classList.toggle('on', l === lang);
+    });
+    var btns = document.querySelectorAll('#langbar button');
+    for (var i = 0; i < btns.length; i++) {
+      btns[i].classList.toggle('on', btns[i].getAttribute('data-lang') === lang);
+    }
+    document.documentElement.lang = lang;
+  }
+  document.getElementById('langbar').addEventListener('click', function (e) {
+    var l = e.target && e.target.getAttribute && e.target.getAttribute('data-lang');
+    if (l) { location.hash = l; apply(l); }
+  });
+  window.addEventListener('hashchange', function () { apply(pick()); });
+  apply(pick());
+})();
+</script>
 </body>
 </html>

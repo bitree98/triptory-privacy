@@ -10,7 +10,7 @@
   body { margin: 0; background: var(--bg); color: var(--ink);
          font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", "Segoe UI", Roboto, "Noto Sans KR", sans-serif;
          line-height: 1.75; font-size: 16px; }
-  .wrap { max-width: 760px; margin: 0 auto; padding: 48px 24px 96px; }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 24px 24px 96px; }
   header { border-bottom: 3px solid var(--blue); padding-bottom: 24px; margin-bottom: 40px; }
   .brand { color: var(--blue); font-weight: 800; font-size: 15px; letter-spacing: .08em; }
   h1 { font-size: 30px; margin: 8px 0 6px; letter-spacing: -0.01em; }
@@ -21,15 +21,31 @@
   ul { padding-left: 22px; margin: 8px 0 16px; }
   li { margin: 5px 0; }
   .note { background: #f3f6fd; border-left: 4px solid var(--blue); padding: 14px 16px; border-radius: 0 8px 8px 0; margin: 16px 0; font-size: 15px; }
-  .divider { border: 0; border-top: 1px solid var(--line); margin: 64px 0 48px; }
   a { color: var(--blue); }
   footer { margin-top: 64px; padding-top: 20px; border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; }
   code.email { background: #f3f6fd; padding: 2px 8px; border-radius: 6px; font-family: inherit; font-weight: 600; color: var(--blue); }
+
+  /* 언어 전환 */
+  .langbar { display: flex; gap: 8px; justify-content: flex-end; padding: 12px 0 20px; flex-wrap: wrap; }
+  .langbar button {
+    font: inherit; font-size: 14px; font-weight: 600;
+    padding: 6px 14px; border-radius: 999px; cursor: pointer;
+    border: 1px solid var(--line); background: #fff; color: var(--muted);
+  }
+  .langbar button.on { background: var(--blue); border-color: var(--blue); color: #fff; }
+  .lang { display: none; }
+  .lang.on { display: block; }
 </style>
 </head>
 <body>
 <div class="wrap">
 
+<nav class="langbar" id="langbar">
+  <button data-lang="ko">한국어</button>
+  <button data-lang="en">English</button>
+</nav>
+
+<section class="lang" id="lang-ko">
 <header>
   <div class="brand">✈️ TRIPTORY</div>
   <h1>이용약관</h1>
@@ -137,9 +153,9 @@
 
 <h2>16. 문의</h2>
 <p>서비스 이용, 신고, 이의제기 문의: <code class="email">triptory1@gmail.com</code></p>
+</section>
 
-<hr class="divider">
-
+<section class="lang" id="lang-en">
 <header>
   <div class="brand">✈️ TRIPTORY</div>
   <h1>Terms of Service</h1>
@@ -247,9 +263,49 @@
 
 <h2>16. Contact</h2>
 <p>Service, reporting, and appeal enquiries: <code class="email">triptory1@gmail.com</code></p>
+</section>
 
 <footer>© 2026 Triptory. All rights reserved.</footer>
 
 </div>
+
+<script>
+(function () {
+  var SUPPORTED = ['ko', 'en'];
+  // 지원하지 않는 앱 언어는 영어로 안내 (한국어보다 국제적으로 이해 가능)
+  var FALLBACK = { ja: 'en', zh: 'en' };
+
+  function pick() {
+    var h = (location.hash || '').replace('#', '').toLowerCase().split('-')[0];
+    if (h) {
+      if (SUPPORTED.indexOf(h) >= 0) return h;
+      if (FALLBACK[h]) return FALLBACK[h];
+    }
+    var nav = (navigator.language || 'en').toLowerCase().split('-')[0];
+    if (SUPPORTED.indexOf(nav) >= 0) return nav;
+    return 'en';
+  }
+
+  function apply(lang) {
+    SUPPORTED.forEach(function (l) {
+      var sec = document.getElementById('lang-' + l);
+      if (sec) sec.classList.toggle('on', l === lang);
+    });
+    var btns = document.querySelectorAll('#langbar button');
+    for (var i = 0; i < btns.length; i++) {
+      btns[i].classList.toggle('on', btns[i].getAttribute('data-lang') === lang);
+    }
+    document.documentElement.lang = lang;
+  }
+
+  document.getElementById('langbar').addEventListener('click', function (e) {
+    var l = e.target && e.target.getAttribute && e.target.getAttribute('data-lang');
+    if (l) { location.hash = l; apply(l); }
+  });
+  window.addEventListener('hashchange', function () { apply(pick()); });
+
+  apply(pick());
+})();
+</script>
 </body>
 </html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Triptory — 이메일 인증 완료</title>
+<style>
+  :root { color-scheme: light; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; min-height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    background: #F8F9FB; padding: 24px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+                 "Helvetica Neue", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+    color: #1F2430;
+  }
+  .card {
+    width: 100%; max-width: 420px; background: #fff;
+    border: 1px solid #E2E5EA; border-radius: 16px;
+    padding: 40px 28px; text-align: center;
+  }
+  .check {
+    width: 64px; height: 64px; margin: 0 auto 20px;
+    border-radius: 50%; background: #3949AB;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .check svg { width: 32px; height: 32px; stroke: #fff; stroke-width: 3;
+               fill: none; stroke-linecap: round; stroke-linejoin: round; }
+  h1 { font-size: 20px; margin: 0 0 10px; }
+  p { font-size: 15px; line-height: 1.6; color: #5B6472; margin: 0; }
+  .langs { margin-top: 28px; padding-top: 20px; border-top: 1px solid #EFF1F4; }
+  .langs p { font-size: 13px; color: #8A93A0; margin: 0 0 8px; }
+  .langs p:last-child { margin-bottom: 0; }
+  .brand { margin-top: 24px; font-size: 12px; color: #A8AFBA; letter-spacing: .04em; }
+</style>
+</head>
+<body>
+  <main class="card">
+    <div class="check" aria-hidden="true">
+      <svg viewBox="0 0 24 24"><polyline points="4 12.5 9.5 18 20 6.5"></polyline></svg>
+    </div>
+
+    <h1>이메일 인증이 완료되었어요</h1>
+    <p>이제 Triptory 앱으로 돌아가 로그인해 주세요.<br>이 창은 닫으셔도 됩니다.</p>
+
+    <div class="langs">
+      <p><strong>Email verified.</strong> Please return to the Triptory app and sign in. You can close this window.</p>
+      <p><strong>メール認証が完了しました。</strong> Triptory アプリに戻ってログインしてください。</p>
+      <p><strong>邮箱验证已完成。</strong> 请返回 Triptory 应用登录。</p>
+    </div>
+
+    <div class="brand">TRIPTORY</div>
+  </main>
+</body>
+</html>
